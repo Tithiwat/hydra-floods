@@ -784,6 +784,7 @@ def export_daily_surface_water(
     tile_size=1.0,
     tile_buffer=100000,
     output_scale=30,
+    export_type='toDrive'
 ):
     """Last and repeated step of the daily surface water fusion process.
     This procedure uses the results from `export_fusion_samples` and
@@ -1106,6 +1107,7 @@ def export_daily_surface_water(
                 description=f"hydrafloods_water_ee_export_{time_id}",
                 scale=output_scale,
                 crs="EPSG:4326",
+                export_type=export_type
             )
 
         elif output_bucket_path is not None:
