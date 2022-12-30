@@ -386,10 +386,11 @@ def export_fusion_samples(
     now = datetime.datetime.now()
     time_id = now.strftime("%Y%m%d%H%M%s")
 
+    desc = f"{os.path.basename(output_asset_path)}_{time_id}"
     task = ee.batch.Export.table.toAsset(
         collection=output_features,
         assetId=output_asset_path,
-        description=f"hydrafloods_fusion_samples_export_{time_id}",
+        description=desc,
     )
     task.start()
     logging.info(f"Started export task for {output_asset_path}")
@@ -517,12 +518,13 @@ def export_surface_water_harmonics(
         )
         harmonic_coefs = harmonic_coefs.divide(scale_factor).int32().set(metadata)
 
+        desc = f"{os.path.basename(output_asset_path)}_{time_id}"
         if output_asset_path is not None:
             geeutils.export_image(
                 harmonic_coefs,
                 region,
                 output_asset_path,
-                description=f"hydrafloods_harmonic_coefficient_export_{time_id}",
+                description=desc,
                 scale=output_scale,
                 crs="EPSG:4326",
             )
@@ -1100,11 +1102,12 @@ def export_daily_surface_water(
                     "look_back": look_back,
                 }
             )
+            desc =f"{os.path.basename(output_asset_path)}_water_{time_id}"
             geeutils.export_image(
                 out_water.set(metadata.combine({"product": "water"})),
                 region,
                 output_asset_path + "_water",
-                description=f"hydrafloods_water_ee_export_{time_id}",
+                description=desc,
                 scale=output_scale,
                 crs="EPSG:4326",
                 export_type=export_type
